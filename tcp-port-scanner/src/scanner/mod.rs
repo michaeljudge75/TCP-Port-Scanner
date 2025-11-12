@@ -1,4 +1,4 @@
-pub mod connect.rs;
-pub mod rate_limit.rs;
-pub mod timed.rs;
+pub mod connect;
+pub mod rate_limit;
+pub mod timed;
 
