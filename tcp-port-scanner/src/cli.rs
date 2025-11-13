@@ -1,52 +1,49 @@
 //This File Contains Everything Relating to Parsing, Validating, and Documenting CLI including how help and usage text appears
-//use clap::Parser;
+#![allow(unused)]
+use clap::Parser;
 use std::fmt::Formatter;
-use std::fmt::Result;
 
 //Different Options for Command Line Arguments
-#[derive(Debug, Clone)]
-//#[command(name = "TCP Port Scanner", version, author, about = "A Concurrent TCP port scanner written in Rust")]
+#[derive(Parser, Debug, Clone, PartialEq)]
+#[command(name = "TCP Port Scanner", version = "1.0", author = "Michael Judge", about = "A Concurrent TCP port scanner written in Rust")]
 pub struct CliArgs{
-    //#[arg(help = "Target host to scan (e.g. 127.0.0.1 or example.com)")]
+    #[arg(long, default_value ="127.0.0.1", help = "Target host to scan (e.g. 127.0.0.1 or example.com)")]
     pub target: String,
 
-   // #[arg(short, long, default_value = "1-1024", help = "Port range to scan, e.g. 1-1024 or 80, 443")]
-    pub ports: PortRange,
+    #[arg(long, default_value_t = 0, help = "Use if you only want to scan a single port")]
+    pub port_single: u32,
 
-    //#[arg(long, default_value = "connect", value_enum, help ="Scan mode: connect or timed")]
+    #[arg(long, default_value_t = 0, help = "What port the scan starts at")]
+    pub port_start: u32,
+
+    #[arg(long, default_value_t = 65535, help = "What port the scan stops at")]
+    pub port_end: u32,
+
+    #[arg(long, default_value = "connect", value_enum, help ="Scan mode: connect or timed")]
     pub mode: ScanMode,
 
-    //#[arg(long, default_value_t = 500, help = "Connection timeout in milliseconds")]
+    #[arg(long, default_value_t = 500, help = "Connection timeout in milliseconds")]
     pub timeout_ms: u64,
 
-    //#[arg(long, default_value_t = 100, help = "Max concurrent scans")]
+    #[arg(long, default_value_t = 100, help = "Max concurrent scans")]
     pub concurrency: usize,
 
-    //#[arg(long, help = "Limit scans per second (optional)")] 
+    #[arg(long, help = "Limit scans per second (optional)")] 
     pub rate_limit: Option<u64>,
 
-    //#[arg(long, help = "Output file path for results (optional")]
-    pub output_path: Option<String>,
-
-    //#[arg(short, long, help = "Enable verbose logging")]
+    #[arg(short, long, help = "Enable verbose logging")]
     pub verbose: bool,
-}
-//Defines a start and end for port range
-#[derive(Debug, Clone)]
-pub struct PortRange{
-    pub start: u16,
-    pub end: u16,
 }
 
 //Represets how Scanner performs its scans
-#[derive(Debug, Clone, clap::ValueEnum)]
+#[derive(Debug, Clone, clap::ValueEnum, PartialEq)]
 pub enum ScanMode{
     Connect,
     Timed,
 }
 
 //Custom Error Type
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum CliError{
     InvalidPortRange,
     InvalidTarget,
@@ -54,18 +51,15 @@ pub enum CliError{
     InvalidArgument(String),
 }
 
-//Implemntations for Better Text Handling
-/*
-impl std::fmt::Display for CliError{}
-impl std::error::Error for CliError{}
-*/
 //Helps Parse the CLI Arguments, wraps CliArgs::parse() and adds Validation
-/*
 use std::net::ToSocketAddrs;
-pub fn parse_args() -> Result<>{
-    let args = CliArgs::parse();
-    
-    if args.ports.start == 0 || args.ports.end > 65535 || args.ports.start > args.ports.end{
+pub fn parse_args(mut args: CliArgs) -> Result<CliArgs, CliError>{
+    if args.port_single != 0{
+        args.port_start = args.port_single;
+        args.port_end = args.port_single+1;
+    }
+
+    if args.port_start == 0 || args.port_end > 65535 || args.port_start > args.port_end{
         return Err(CliError::InvalidPortRange);
     }
 
@@ -77,7 +71,9 @@ pub fn parse_args() -> Result<>{
 
     let target = format!("{}:80", args.target);
     if target.to_socket_addrs().is_err(){
-        return Err(CliError::InvalidArgument);
+        return Err(CliError::InvalidArgument(
+            "Address is Invalid".into(),
+        ));
     }
 
     if let Some(rate_limit) = args.rate_limit{
@@ -87,39 +83,11 @@ pub fn parse_args() -> Result<>{
             ));
         }
     }
-
-    Ok(CliArgs)
-
+    print!("{:#?}", args);
+    Ok(args)
 }
 
-//Helps Parse the Specified Ports into Numbers
-use std::num::ParseIntError;
-pub fn parse_port_range(input: &str) -> Result<>{
-    let parts: Vec<&str> = input.split('-').collect();
 
-    match parts.len(){
-        1 =>{
-            //Single Port
-            let port: u16 = parts[0].parse().map_err(|_| CliError::InvalidPortRange)?;
-            if port == 0 || port > 65535{
-                return Err(CliError::InvalidPortRange);
-            }
-            Ok(PortRange{start: port, end: port})
-        }
-        2 =>{
-            //Port Range    
-            let start: u16 = parts[0].parse().map_err(|_| CliError::InvalidPortRange)?;
-            let end: u16 = parts[1].parse().map_err(|_| CliError::InvalidPortRange)?;
-            if start == 0 || end > 65535 || start > end{
-                return Err(CliError::InvalidPortRange);
-            }
-            Ok(PortRange{start, end})
-        }
-        _ => Err(CliError::InvalidPortRange),
-    }
-
-}
-*/
 //Tests For CLI Parsing
 /*
 #[cfg(test)]
