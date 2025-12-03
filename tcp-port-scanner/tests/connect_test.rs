@@ -1,3 +1,4 @@
+#![allow(unused)]
 use tcp_port_scanner::scanner::connect::scan_port;
 use tcp_port_scanner::results::{PortStatus, ScanError};
 
@@ -15,7 +16,7 @@ fn test_scan_open_port(){
 }
 
 //Tests if Scanning a Closed Port Works
-static#[test]
+#[test]
 fn test_scan_closed_port(){
    let result = scan_port("127.0.0.1", 65000, 200);
 
