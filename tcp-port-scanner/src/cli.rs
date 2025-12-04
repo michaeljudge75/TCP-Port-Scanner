@@ -19,9 +19,6 @@ pub struct CliArgs{
     #[arg(long, default_value_t = 65535, help = "What port the scan stops at")]
     pub port_end: u32,
 
-    //#[arg(long, default_value = "connect", value_enum, help ="Scan mode: connect or timed")]
-    //pub mode: ScanMode,
-
     #[arg(long, default_value_t = 500, help = "Connection timeout in milliseconds")]
     pub timeout_ms: u64,
 
@@ -31,9 +28,7 @@ pub struct CliArgs{
     #[arg(long, help = "Limit scans per second (optional)")] 
     pub rate_limit: Option<u64>,
 
-    //#[arg(short, long, help = "Enable verbose logging")]
-    //pub verbose: bool,
-}
+    }
 
 //Represets how Scanner performs its scans
 #[derive(Debug, Clone, clap::ValueEnum, PartialEq)]
