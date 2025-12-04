@@ -49,13 +49,12 @@ fn test_valid_ip_parses(){
 }
 
 //Tests that Code Errors if IP is Invalid
-/*
 #[test]
 fn test_invalid_ip_fails(){
     let args = parse_args(CliArgs::parse_from(["tcp-port-scanner", "--target", "999.999.999.999", "--port-start", "20", "--port-end", "80"]));
     assert!(matches!(args, Err(CliError::InvalidTarget)));
 }
-*/
+
 //Tests that Domain is Valid
 #[test]
 fn test_valid_domain_parses(){
@@ -65,10 +64,8 @@ fn test_valid_domain_parses(){
 }
 
 //Tests that Code Errors if Domain is Invalid
-/*
 #[test]
 fn test_invalid_domain_fails(){
     let args = parse_args(CliArgs::parse_from(["tcp-port-scanner", "--target", "not_a_real_domain_please.fail", "--port-start", "20", "--port-end", "80"]));
     assert!(matches!(args, Err(CliError::InvalidTarget)));
 }
-*/
