@@ -19,8 +19,8 @@ pub struct CliArgs{
     #[arg(long, default_value_t = 65535, help = "What port the scan stops at")]
     pub port_end: u32,
 
-    #[arg(long, default_value = "connect", value_enum, help ="Scan mode: connect or timed")]
-    pub mode: ScanMode,
+    //#[arg(long, default_value = "connect", value_enum, help ="Scan mode: connect or timed")]
+    //pub mode: ScanMode,
 
     #[arg(long, default_value_t = 500, help = "Connection timeout in milliseconds")]
     pub timeout_ms: u64,
@@ -31,8 +31,8 @@ pub struct CliArgs{
     #[arg(long, help = "Limit scans per second (optional)")] 
     pub rate_limit: Option<u64>,
 
-    #[arg(short, long, help = "Enable verbose logging")]
-    pub verbose: bool,
+    //#[arg(short, long, help = "Enable verbose logging")]
+    //pub verbose: bool,
 }
 
 //Represets how Scanner performs its scans
@@ -71,9 +71,7 @@ pub fn parse_args(mut args: CliArgs) -> Result<CliArgs, CliError>{
 
     let target = format!("{}:80", args.target);
     if target.to_socket_addrs().is_err(){
-        return Err(CliError::InvalidArgument(
-            "Address is Invalid".into(),
-        ));
+       return Err(CliError::InvalidTarget);
     }
 
     if let Some(rate_limit) = args.rate_limit{
@@ -83,43 +81,9 @@ pub fn parse_args(mut args: CliArgs) -> Result<CliArgs, CliError>{
             ));
         }
     }
-    print!("{:#?}", args);
+    //print!("{:#?}", args);
     Ok(args)
 }
 
 
-//Tests For CLI Parsing
-/*
-#[cfg(test)]
-mod tests{
-    use super::*;
-    use clap::Parser;
 
-    #[test]
-    fn test_default_args(){
-        let args = CliArgs::parse_from(["prog", "127.0.0.1"]);
-        assert_eq!(args.target, "127.0.0.1");
-    }
-
-
-    #[cfg(test)]
-
-    use super::*;
-    #[test]
-    fn test_parse_single_port(){
-        let range = parse_port_range("22").unwrap();
-        assert_eq!(range.start, 22);
-        assert_eq!(range.end, 22);
-    }
-    #[test]
-    fn test_parse_port_range(){
-        let range = parse_port_range("20-25").unwrap();
-        assert_eq!(range.start, 20);
-        assert_eq!(range.end, 25);
-    }
-    #[test]
-    fn test_invaild_range(){
-        assert!(parse_port_range("70000-80000").is_err());
-    }
-}
-*/
