@@ -23,10 +23,4 @@ fn main() {
             Err(e) => println!("Port {}: {:?}", port, e),
         }
     }
-    //For Detailed Report
-    /*
-        for (port, result) in results{
-            println!("{port}: {:?}", result);
-        }
-    */
 }
