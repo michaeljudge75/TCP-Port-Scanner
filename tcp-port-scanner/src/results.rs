@@ -8,9 +8,9 @@ pub enum PortStatus {
     Filtered,
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub enum ScanError{
+pub enum ScanError {
     DnsFailed(String),
-    UnknownHost
+    UnknownHost,
 }
 
 #[derive(Debug, Clone, PartialEq)]

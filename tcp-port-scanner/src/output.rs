@@ -1,25 +1,25 @@
 #![allow(unused)]
-use crate::results::{ScanResult, PortStatus};
+use crate::results::{PortStatus, ScanResult};
 
 //Prints a summary of what is being scanned
-pub fn print_scan_summary(target: &str, start_port: u32, end_port: u32){
+pub fn print_scan_summary(target: &str, start_port: u32, end_port: u32) {
     println!("\nStarting scan on target: {}", target);
     println!("Port Range: {} - {}", start_port, end_port);
     println!("-----------------------------------------");
-} 
+}
 
 //Prints what ports have been scanned and what their status is
-pub fn print_port_status(result: &ScanResult){
+pub fn print_port_status(result: &ScanResult) {
     println!("Port {:>5}: {:?}", result.port, result.status);
 }
 
 //Prints full results of all ports scanned and a total of how many ports were scanned
-pub fn print_results(results: &Vec<ScanResult>){
+pub fn print_results(results: &Vec<ScanResult>) {
     println!("\nScan Complete!");
     println!("--------------------");
 
-    for result in results{
-        println!("{}", result); 
+    for result in results {
+        println!("{}", result);
     }
 
     println!("--------------------");
@@ -27,6 +27,6 @@ pub fn print_results(results: &Vec<ScanResult>){
 }
 
 //Prints a message if there is any error
-pub fn print_error(msg: &str){
+pub fn print_error(msg: &str) {
     eprintln!("[ERROR] {}", msg);
 }

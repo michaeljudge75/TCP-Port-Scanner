@@ -3,17 +3,17 @@ use tcp_port_scanner::scanner::rate_limit::RateLimiter;
 
 //Tests that new() stores the correct rate
 #[test]
-fn test_rate_limiter_new(){
+fn test_rate_limiter_new() {
     let limiter = RateLimiter::new(5);
 
-    let expected = Duration::from_secs_f64(1.0/5.0);
+    let expected = Duration::from_secs_f64(1.0 / 5.0);
 
     assert_eq!(limiter.interval(), expected);
 }
 
 //Tests that wait() must delay when called faster than the rate limit
 #[test]
-fn test_rate_limiter_enforces_delay(){
+fn test_rate_limiter_enforces_delay() {
     let mut rl = RateLimiter::new(1);
 
     let start = Instant::now();
@@ -27,11 +27,11 @@ fn test_rate_limiter_enforces_delay(){
 
 //Tests that high rate should not cause a notable delay
 #[test]
-fn test_rate_limiter_no_delay_high_rate(){
+fn test_rate_limiter_no_delay_high_rate() {
     let mut rl = RateLimiter::new(1000);
 
     let start = Instant::now();
-    for _ in 0..20{
+    for _ in 0..20 {
         rl.wait();
     }
     let elapsed = start.elapsed();
@@ -41,7 +41,7 @@ fn test_rate_limiter_no_delay_high_rate(){
 
 //Tests to ensure accurate timing for small sequences
 #[test]
-fn test_rate_limiter_timing_accuracy(){
+fn test_rate_limiter_timing_accuracy() {
     let mut rl = RateLimiter::new(2);
 
     let t0 = Instant::now();
@@ -52,9 +52,9 @@ fn test_rate_limiter_timing_accuracy(){
     assert!(elapsed >= Duration::from_millis(450));
 }
 
-//Tests that multiple calls accumulate delay correctly 
+//Tests that multiple calls accumulate delay correctly
 #[test]
-fn test_rate_limiter_multiple_waits(){
+fn test_rate_limiter_multiple_waits() {
     let mut rl = RateLimiter::new(1);
 
     let t0 = Instant::now();
@@ -68,7 +68,7 @@ fn test_rate_limiter_multiple_waits(){
 
 //Tests to ensure wait() introduces a delay when required by the rate limit
 #[test]
-fn test_rate_limiter_waits(){
+fn test_rate_limiter_waits() {
     let mut limiter = RateLimiter::new(1);
     limiter.wait();
 
@@ -81,7 +81,7 @@ fn test_rate_limiter_waits(){
 
 //Tests that wait() introduces no delay if enough time has already passed
 #[test]
-fn test_rate_limiter_no_wait_after_interval(){
+fn test_rate_limiter_no_wait_after_interval() {
     let mut limiter = RateLimiter::new(10);
     limiter.wait();
 
@@ -91,8 +91,8 @@ fn test_rate_limiter_no_wait_after_interval(){
     limiter.wait();
     let elapsed = start.elapsed().as_secs_f64();
 
-    assert!(elapsed < 0.05, "Rate Limiter waited even though interval elapsed");
+    assert!(
+        elapsed < 0.05,
+        "Rate Limiter waited even though interval elapsed"
+    );
 }
-
-
-
