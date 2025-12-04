@@ -99,7 +99,7 @@ License
 
 Acknowledgements
 - Built with `clap` for CLI parsing
-# and `serde` for internal data handling.
+[comment]: <> and `serde` for internal data handling.
 <!-- ⚠️ This README has been generated from the file(s) "blueprint.md" ⚠️-->
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#port-scanner)
 
